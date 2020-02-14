@@ -1,0 +1,47 @@
+package io.github.learnlexyacc.jflex;
+
+%%
+
+%class PropertiesLexer
+%standalone
+
+CRLF=\r\n
+WHITE_SPACE=[\ \t\r\n]
+
+KEY=[^:=\ \t\r\n\\] | "\\"{CRLF} | "\\".
+SEPARATOR=[:=]
+SEPARATOR_SPACE=\ \t
+VALUE=[^\t\r\n\\] | "\\"{CRLF} | "\\".
+VALUES_BEFORE_SEPARATOR=([^:=\ \t\r\n\\] | "\\"{CRLF} | "\\".)({VALUE}*)
+VALUES_AFTER_SEPARATOR=([^\ \t\r\n\\] | "\\"{CRLF} | "\\".)({VALUE}*)
+
+COMMENT=("#"|"!")[^\r\n]*
+
+%state VALUE
+%state KEY_VALUE_SEPARATOR_HEAD
+%state KEY_VALUE_SEPARATOR_TAIL
+
+%%
+
+<YYINITIAL> {COMMENT}						{ yybegin(YYINITIAL); return TokenType.COMMENT; }
+
+<YYINITIAL> {KEY}+							{ yybegin(KEY_VALUE_SEPARATOR_HEAD); return TokenType.KEY; }
+
+<KEY_VALUE_SEPARATOR_HEAD> {
+	{SEPARATOR_SPACE}+						{ yybegin(KEY_VALUE_SEPARATOR_HEAD); return TokenType.WHITE_SPACE; }
+	{SEPARATOR}								{ yybegin(KEY_VALUE_SEPARATOR_TAIL); return TokenType.SEPARATOR; }
+	{VALUES_BEFORE_SEPARATOR}				{ yybegin(YYINITIAL); return TokenType.VALUE; }
+	{CRLF}{WHITE_SPACE}*					{ yybegin(YYINITIAL); return TokenType.WHITE_SPACE; }
+}
+
+<KEY_VALUE_SEPARATOR_TAIL> {
+	{SEPARATOR_SPACE}+						{ yybegin(KEY_VALUE_SEPARATOR_TAIL); return TokenType.WHITE_SPACE; }
+	{VALUES_AFTER_SEPARATOR}				{ yybegin(YYINITIAL); return TokenType.VALUE; }
+	{CRLF}{WHITE_SPACE}*					{ yybegin(YYINITIAL); return TokenType.WHITE_SPACE; }
+}
+
+<VALUE> {VALUE}+							{ yybegin(YYINITIAL); return TokenType.VALUE; }
+<VALUE> {CRLF}{WHITE_SPACE}*				{ yybegin(YYINITIAL); return TokenType.WHITE_SPACE; }
+{WHITE_SPACE}+								{ return TokenType.WHITE_SPACE; }
+
+[^]											{ return TokenType.ERROR; }

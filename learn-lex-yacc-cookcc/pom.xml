@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>learn-lex-yacc-cookcc</artifactId>
+	<packaging>jar</packaging>
+
+	<name>learn-lex-yacc-cookcc</name>
+	<description>Learn Lex Yacc - CookCC</description>
+
+	<parent>
+		<groupId>io.github.learnlexyacc</groupId>
+		<artifactId>learn-lex-yacc</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+	<!-- ================================================ -->
+	<dependencies>
+		<dependency>
+			<groupId>org.yuanheng.cookcc</groupId>
+			<artifactId>cookcc</artifactId>
+			<version>0.4.3</version>
+		</dependency>
+	</dependencies>
+	<!-- ================================================ -->
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.yuanheng.cookcc</groupId>
+				<artifactId>cookcc-maven-plugin</artifactId>
+				<version>1.0.2</version>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+					<tasks>
+						<task
+							src="${project.basedir}/src/main/java/io/github/learnlexyacc/cookcc/CookCCCalculatorParser.java" />
+					</tasks>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<configuration>
+							<tasks>
+								<echo>Moving CookCC generated code to proper directory...</echo>
+								<mkdir
+									dir="${project.build.directory}/generated-sources/cookcc" />
+								<move file="${project.basedir}/src/main/java/org"
+									todir="${project.build.directory}/generated-sources/cookcc" />
+							</tasks>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>${project.build.directory}/generated-sources/cookcc</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>
