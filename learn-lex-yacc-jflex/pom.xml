@@ -18,7 +18,7 @@
 	</parent>
 	<!-- ================================================ -->
 	<properties>
-		<jflex.version>1.7.0</jflex.version>
+		<jflex.version>1.8.2</jflex.version>
 	</properties>
 	<!-- ================================================ -->
 	<dependencies>
