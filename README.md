@@ -1,21 +1,31 @@
 Learn Lex and Yacc
 ===================
 
-I named this project after Lex and Yacc in honor of the classic UNIX tools to build 
-parsers. Obviously this is a Java project, so the UNIX tools are not used, but rather 
-I use several Java parsing libraries to build simple example calculators.
+This project contains many examples of using Lex and Yacc style tools to build parsers.
+I named this project after Lex and Yacc in honor of the classic UNIX tools. I do include
+an example project using the Flex and Bison programs, but most of the examples here are
+for the Java platform. I use various parsing libraries to build simple example calculators.
 
 Parsing input is a valuable skill to know, ranging from writing grammars to walking 
 syntax trees. Knowing the types of parsing capabilities will help one select an appropriate 
 library.
 
-So what is in this project?
-===========================
+What are the various modules?
+=============================
 
 This project contains several modules that demonstrates parsing a simple language 
 using different libraries. The grammar is simple. The input should be a list of simple 
 assignments statements (e.g. "a = 2 * 3;"). The list can also reference previously 
 assigned variables (e.g. "b = a * a;")
+
+## [`learn-lex-yacc-c`](./learn-lex-yacc-c)
+
+This project uses the classic Lex and Yacc tools to build a C program that reads
+its input from `stdin` and prints out the resulting variables.
+
+https://www.gnu.org/software/bison/
+
+http://web.mit.edu/gnu/doc/html/flex_1.html
 
 ## [`learn-lex-yacc-antlr2`](./learn-lex-yacc-antlr2)
 

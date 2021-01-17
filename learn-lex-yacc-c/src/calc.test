@@ -1,0 +1,248 @@
+#!/bin/bash
+
+echo 1..12 # Test plan; 12 tests
+
+CALC=./calc
+
+function test_build {
+	if [ -f "$CALC" ]; then
+		echo "ok build - $CALC executable found. # OK"
+	else 
+		echo "not ok build - $CALC executable not found # FAIL"
+		return
+	fi
+}
+
+function test_empty {
+	# process empty input, lines of output should be zero
+	lines=`eval echo "" | $CALC | wc -l | awk '{ print $1 }'`
+
+	if [ $lines -eq 0 ]; then
+		echo "ok empty - correct calc output # OK"
+	else
+		echo "not ok empty - incorrect calc output # FAIL"		
+	fi
+}
+
+function test_garbage {
+	# process bad input, output should be syntax error
+	output=`eval echo "2;" | $CALC 2>&1`
+
+	if [ "$output" = "syntax error" ]; then
+		echo "ok garbage - correct calc output # OK"
+	else
+		echo "not ok garbage - incorrect calc output # FAIL"		
+	fi
+}
+
+function test_garbage2 {
+	# process bad input, output should be syntax error
+	output=`eval echo "a = abc;" | $CALC 2>&1 | head -1`
+
+	if [ "$output" = "Undefined variable: abc" ]; then
+		echo "ok garbage2 - correct calc output # OK"
+	else
+		echo "not ok garbage2 - incorrect calc output # FAIL"		
+	fi
+}
+
+function test_terms {
+	# test single terms
+	$CALC > calc.out << EOF
+		a=1;
+		b=10;
+		c=10.01200;
+		d=(1);
+		e=(10);
+		f=(10.01200);
+EOF
+	diff calc.expected.terms calc.out
+
+	if [ $? -eq 0 ]; then
+		echo "ok terms - correct calc output # OK"
+	else
+		echo "not ok terms - incorrect calc output # FAIL"		
+	fi
+	rm calc.out
+}
+
+function test_add {
+	# test addition
+	$CALC > calc.out << EOF
+		a = 1+2;
+		b = 2+1;
+		c = 1+(2+3);
+		d = (1+2)+3;
+		e = 1.1+2.1;
+		f = 2.1+1.1;
+		g = 1.1+(2.1+3.1);
+		h = (1.1+2.1)+3.1;
+		i = 1+2+3+4+5;
+EOF
+	diff calc.expected.add calc.out
+
+	if [ $? -eq 0 ]; then
+		echo "ok add - correct calc output # OK"
+	else
+		echo "not ok add - incorrect calc output # FAIL"		
+	fi
+	rm calc.out
+}
+
+function test_sub {
+	# test subtraction
+	$CALC > calc.out << EOF
+		a = 1-2;
+		b = 2-1;
+		c = 1-(2-3);
+		d = (1-2)-3;
+		e = 1.1-2.1;
+		f = 2.1-1.1;
+		g = 1.1-(2.1-3.1);
+		h = (1.1-2.1)-3.1;
+		i = 1-2-3-4-5;
+EOF
+	diff calc.expected.sub calc.out
+
+	if [ $? -eq 0 ]; then
+		echo "ok sub - correct calc output # OK"
+	else
+		echo "not ok sub - incorrect calc output # FAIL"		
+	fi
+	rm calc.out
+}
+
+function test_mult {
+	# test multiplication
+	$CALC > calc.out << EOF
+		a = 1*2;
+		b = 2*1;
+		c = 1*(2*3);
+		d = (1*2)*3;
+		e = 1.1*2.1;
+		f = 2.1*1.1;
+		g = 1.1*(2.1*3.1);
+		h = (1.1*2.1)*3.1;
+		i = 1*2*3*4*5;
+EOF
+	diff calc.expected.mult calc.out
+
+	if [ $? -eq 0 ]; then
+		echo "ok mult - correct calc output # OK"
+	else
+		echo "not ok mult - incorrect calc output # FAIL"		
+	fi
+	rm calc.out
+}
+
+function test_div {
+	# test division
+	$CALC > calc.out << EOF
+		a = 1/2;
+		b = 2/1;
+		c = 1/(2/3);
+		d = (1/2)/3;
+		e = 1.1/2.1;
+		f = 2.1/1.1;
+		g = 1.1/(2.1/3.1);
+		h = (1.1/2.1)/3.1;
+		i = 1/2/3/4/5;
+EOF
+	diff calc.expected.div calc.out
+
+	if [ $? -eq 0 ]; then
+		echo "ok div - correct calc output # OK"
+	else
+		echo "not ok div - incorrect calc output # FAIL"		
+	fi
+	rm calc.out
+}
+
+function test_order {
+	# test order of operations
+	$CALC > calc.out << EOF
+		a = 15+5-3;
+		b = 15+5*3;
+		c = 15+5/3;
+		
+		d = 15-5+3;
+		e = 15-5*3;
+		f = 15-5/3;
+		
+		g = 15*5+3;
+		h = 15*5-3;
+		i = 15*5/3;
+		
+		j = 15/5+3;
+		k = 15/5-3;
+		l = 15/5*3;
+EOF
+	diff calc.expected.order calc.out
+
+	if [ $? -eq 0 ]; then
+		echo "ok order - correct calc output # OK"
+	else
+		echo "not ok order - incorrect calc output # FAIL"		
+	fi
+	rm calc.out
+}
+
+function test_mixed {
+	# test mixed operations
+	$CALC > calc.out << EOF
+		a = 15*2*(6*2+3)+4;
+		b = (1+2)*3*4;
+		c = (((1.0+2)))*((3.0*4));
+		d = 1+2*3-4/2;
+		e = 1*2+4/2-2;
+		f = 1+2+3-4+5*3-4/2;
+		g = 1*2+3-4-5+4/2-2;
+EOF
+	diff calc.expected.mixed calc.out
+
+	if [ $? -eq 0 ]; then
+		echo "ok mixed - correct calc output # OK"
+	else
+		echo "not ok mixed - incorrect calc output # FAIL"		
+	fi
+	rm calc.out
+}
+
+function test_vars {
+	# test var operations
+	$CALC > calc.out << EOF
+		a = 5; b = 4; c = (a*b)+(a-b)-1.9;
+EOF
+	diff calc.expected.var calc.out
+
+	if [ $? -eq 0 ]; then
+		echo "ok vars - correct calc output # OK"
+	else
+		echo "not ok vars - incorrect calc output # FAIL"		
+	fi
+	rm calc.out
+}
+
+test_build
+test_empty
+test_garbage
+test_garbage2
+test_terms
+test_add
+test_sub
+test_mult
+test_div
+test_order
+test_mixed
+test_vars
+
+exit 0
+
+# How to report on test cases
+
+# https://www.gnu.org/software/automake/manual/html_node/Use-TAP-with-the-Automake-test-harness.html
+
+#echo 1..3 # Test plan; 3 tests
+#echo "ok 1 - Output equals # OK"
+#echo "not ok 2 - Test failed # FAIL"
+#echo "ok 3 - Test skipped # SKIP"
