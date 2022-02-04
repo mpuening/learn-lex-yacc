@@ -20,5 +20,18 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
-      - name: Run Tests
+      - name: Run Build
         run: mvn -B package
+  cbuild:
+    needs: javabuild
+    name: C Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Run Build
+        run: |
+          cd learn-lex-yacc-c
+          autoreconf --install
+          ./configure
+          make 
+          make check
