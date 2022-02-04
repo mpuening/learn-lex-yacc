@@ -5,6 +5,8 @@
 #include <string.h>
 
 #include "calc.h"
+#include "fields.h"
+#include "jrb.h"
 
 extern char *yytext;
 extern int yylex(void);
