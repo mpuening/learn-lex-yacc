@@ -1,6 +1,8 @@
 Learn Lex and Yacc
 ===================
 
+[![Continuous Integration](https://github.com/mpuening/learn-lex-yacc/actions/workflows/ci.yml/badge.svg)](https://github.com/mpuening/learn-lex-yacc/actions/workflows/ci.yml)
+
 This project contains many examples of using Lex and Yacc style tools to build parsers.
 I named this project after Lex and Yacc in honor of the classic UNIX tools. I do include
 an example project using the Flex and Bison programs, but most of the examples here are

@@ -54,13 +54,13 @@
 					<execution>
 						<phase>generate-sources</phase>
 						<configuration>
-							<tasks>
+							<targets>
 								<echo>Moving CookCC generated code to proper directory...</echo>
 								<mkdir
 									dir="${project.build.directory}/generated-sources/cookcc" />
 								<move file="${project.basedir}/src/main/java/org"
 									todir="${project.build.directory}/generated-sources/cookcc" />
-							</tasks>
+							</targets>
 						</configuration>
 						<goals>
 							<goal>run</goal>
