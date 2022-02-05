@@ -3,7 +3,7 @@ AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 
 AC_PROG_CC
 
-AC_PROG_LEX
+AC_PROG_LEX([noyywrap])
 AC_PROG_YACC
 
 AC_PROG_RANLIB

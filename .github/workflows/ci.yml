@@ -31,6 +31,8 @@ jobs:
       - name: Run Build
         run: |
           cd learn-lex-yacc-c
+          apt-get update -qq
+          apt-get install -y bison flex
           autoreconf --install
           ./configure
           make 

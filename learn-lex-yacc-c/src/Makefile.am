@@ -1,8 +1,8 @@
 bin_PROGRAMS = calc
-calc_SOURCES = calc.c
+calc_SOURCES = main.c
 
-calc_CFLAGS = -I../lib/libfdr -I../lib/libcalc
-calc_LDADD = ../lib/libfdr/libfdr.a ../lib/libcalc/libcalc.a $(EXTRALIBS)
+calc_CFLAGS = -I../lib/libcalc -I../lib/libfdr
+calc_LDADD = ../lib/libcalc/libcalc.a ../lib/libfdr/libfdr.a $(EXTRALIBS)
 
 
 TESTS_ENVIRONMENT =
