@@ -16,12 +16,16 @@
 		<version>0.0.1-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
-
+	<!-- ================================================ -->
+	<properties>
+		<antlr.version>2.7.7</antlr.version>
+	</properties>
 	<!-- ================================================ -->
 	<dependencies>
 		<dependency>
 			<groupId>antlr</groupId>
 			<artifactId>antlr</artifactId>
+			<version>${antlr.version}</version>
 		</dependency>
 	</dependencies>
 

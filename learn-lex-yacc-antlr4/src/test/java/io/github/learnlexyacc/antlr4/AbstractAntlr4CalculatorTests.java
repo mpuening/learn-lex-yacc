@@ -9,8 +9,6 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
-import io.github.learnlexyacc.antlr4.Antlr4Calculator;
-
 /**
  * Shared test cases for the various implementations of the calculator
  */
