@@ -18,7 +18,7 @@
 	</parent>
 	<!-- ================================================ -->
 	<properties>
-		<antlr.version>4.11.1</antlr.version>
+		<antlr.version>4.13.1</antlr.version>
 	</properties>
 	<!-- ================================================ -->
 	<dependencies>
