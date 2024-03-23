@@ -9,17 +9,12 @@ jobs:
     name: Java Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v4
       - name: Set Up JDK
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v4
         with:
-          java-version: '17'
-      - name: Cache Maven Packages
-        uses: actions/cache@v1
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
+          distribution: 'temurin'
+          java-version: '21'
       - name: Run Build
         run: mvn -B package
   cbuild:
@@ -27,7 +22,7 @@ jobs:
     name: C Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v4
       - name: Run Build
         run: |
           cd learn-lex-yacc-c
